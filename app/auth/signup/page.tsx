@@ -125,7 +125,7 @@ export default function SignupPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-black mb-1"
               >
                 Email
               </label>
@@ -135,7 +135,7 @@ export default function SignupPage() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-500 ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-black placeholder:text-gray-700 ${
                   errors.email ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="you@example.com"
@@ -150,7 +150,7 @@ export default function SignupPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-black mb-1"
               >
                 Password
               </label>
@@ -160,7 +160,7 @@ export default function SignupPage() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-500 ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-black placeholder:text-gray-700 ${
                   errors.password ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Min. 8 characters"
@@ -175,7 +175,7 @@ export default function SignupPage() {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-black mb-1"
               >
                 Full Name
               </label>
@@ -185,7 +185,7 @@ export default function SignupPage() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-500 ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-black placeholder:text-gray-700 ${
                   errors.name ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="John Doe"
@@ -200,7 +200,7 @@ export default function SignupPage() {
             <div>
               <label
                 htmlFor="team"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-black mb-1"
               >
                 Team Name
               </label>
@@ -210,7 +210,7 @@ export default function SignupPage() {
                 name="team"
                 value={formData.team}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-500 ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-black placeholder:text-gray-500 ${
                   errors.team ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Your team name"
@@ -225,7 +225,7 @@ export default function SignupPage() {
             <div>
               <label
                 htmlFor="position"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-black mb-1"
               >
                 Position
               </label>
@@ -234,7 +234,7 @@ export default function SignupPage() {
                 name="position"
                 value={formData.position}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors bg-white ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-black transition-colors bg-white ${
                   errors.position ? 'border-red-500' : 'border-gray-300'
                 }`}
                 disabled={isLoading}

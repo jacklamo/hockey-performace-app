@@ -71,7 +71,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-black mb-1"
               >
                 Email
               </label>
@@ -81,7 +81,7 @@ export default function LoginPage() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-black placeholder:text-gray-500"
                 placeholder="you@example.com"
                 disabled={isLoading}
                 required
@@ -92,7 +92,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-black mb-1"
               >
                 Password
               </label>
@@ -102,7 +102,7 @@ export default function LoginPage() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-black placeholder:text-gray-500"
                 placeholder="Enter your password"
                 disabled={isLoading}
                 required
@@ -135,7 +135,7 @@ export default function LoginPage() {
 
           {/* Signup Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link
               href="/auth/signup"
               className="font-medium text-blue-600 hover:text-blue-700 transition-colors"
