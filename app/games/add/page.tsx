@@ -132,7 +132,7 @@ export default function AddGamePage() {
         {/* Back Button */}
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-black placeholder:text-gray-600 hover:text-gray-900 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Dashboard
@@ -154,7 +154,7 @@ export default function AddGamePage() {
                 <div>
                   <label
                     htmlFor="date"
-                    className="block text-sm font-bold text-gray-700 mb-1"
+                    className="block text-sm font-bold text-black placeholder:text-gray-600 mb-1"
                   >
                     Date
                   </label>
@@ -165,7 +165,7 @@ export default function AddGamePage() {
                     value={formData.date}
                     onChange={handleChange}
                     max={today}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black placeholder:text-gray-600 outline-none transition-colors ${
                       errors.date ? 'border-red-500' : 'border-gray-300'
                     }`}
                     disabled={isLoading}
@@ -180,7 +180,7 @@ export default function AddGamePage() {
                 <div>
                   <label
                     htmlFor="opponent"
-                    className="block text-sm font-bold text-gray-700 mb-1"
+                    className="block text-sm font-bold text-black placeholder:text-gray-600 mb-1"
                   >
                     Opponent
                   </label>
@@ -191,7 +191,7 @@ export default function AddGamePage() {
                     value={formData.opponent}
                     onChange={handleChange}
                     placeholder="Team name"
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder:text-gray-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-black placeholder:text-gray-600 ${
                       errors.opponent ? 'border-red-500' : 'border-gray-300'
                     }`}
                     disabled={isLoading}
@@ -286,7 +286,7 @@ export default function AddGamePage() {
                 <div>
                   <label
                     htmlFor="goals"
-                    className="block text-sm font-bold text-gray-700 mb-1"
+                    className="block text-sm font-bold text-black placeholder:text-gray-600 mb-1"
                   >
                     Goals
                   </label>
@@ -297,7 +297,7 @@ export default function AddGamePage() {
                     value={formData.goals}
                     onChange={handleChange}
                     min="0"
-                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 text-black placeholder:text-gray-600 focus:border-blue-500 outline-none transition-colors ${
                       errors.goals ? 'border-red-500' : 'border-gray-300'
                     }`}
                     disabled={isLoading}
@@ -322,7 +322,7 @@ export default function AddGamePage() {
                     value={formData.assists}
                     onChange={handleChange}
                     min="0"
-                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    className={`w-full px-4 py-3 text-lg border rounded-lg text-black placeholder:text-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
                       errors.assists ? 'border-red-500' : 'border-gray-300'
                     }`}
                     disabled={isLoading}
@@ -336,7 +336,7 @@ export default function AddGamePage() {
                 <div>
                   <label
                     htmlFor="shots"
-                    className="block text-sm font-bold text-gray-700 mb-1"
+                    className="block text-sm font-bold text-black placeholder:text-gray-600 mb-1"
                   >
                     Shots
                   </label>
@@ -347,7 +347,7 @@ export default function AddGamePage() {
                     value={formData.shots}
                     onChange={handleChange}
                     min="0"
-                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black placeholder:text-gray-600 outline-none transition-colors ${
                       errors.shots ? 'border-red-500' : 'border-gray-300'
                     }`}
                     disabled={isLoading}
@@ -361,7 +361,7 @@ export default function AddGamePage() {
                 <div>
                   <label
                     htmlFor="plusMinus"
-                    className="block text-sm font-bold text-gray-700 mb-1"
+                    className="block text-sm font-bold text-black placeholder:text-gray-600 mb-1"
                   >
                     Plus/Minus
                   </label>
@@ -371,7 +371,7 @@ export default function AddGamePage() {
                     name="plusMinus"
                     value={formData.plusMinus}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black placeholder:text-gray-600 outline-none transition-colors ${
                       errors.plusMinus ? 'border-red-500' : 'border-gray-300'
                     }`}
                     disabled={isLoading}
@@ -385,7 +385,7 @@ export default function AddGamePage() {
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="iceTime"
-                    className="block text-sm font-bold text-gray-700 mb-1"
+                    className="block text-sm font-bold text-black placeholder:text-gray-600 mb-1"
                   >
                     Ice Time (minutes)
                   </label>
@@ -396,7 +396,7 @@ export default function AddGamePage() {
                     value={formData.iceTime}
                     onChange={handleChange}
                     min="0"
-                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    className={`w-full px-4 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black placeholder:text-gray-600 outline-none transition-colors ${
                       errors.iceTime ? 'border-red-500' : 'border-gray-300'
                     }`}
                     disabled={isLoading}
