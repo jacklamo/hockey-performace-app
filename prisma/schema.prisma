@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+    id  String @id @default(cuid())
+    email String @unique
+    password  String
+    name  String
+    team  String
+    position  String
+    createdAt DateTime  @default(now())
+    games Game[]
+}
+
+model Game {
+  id  String @id @default(cuid())
+  userId  String
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date  DateTime
+  opponent  String
+  homeAway  String
+  result  String
+
+  goals       Int          @default(0)        // Player's goals
+  assists     Int          @default(0)        // Player's assists
+  shots       Int          @default(0)        // Player's shots
+  plusMinus   Int          @default(0)        // Plus/minus stat (can be negative)
+  iceTime     Int          @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  mentalState MentalState?
+
+  @@index([userId, date])
+}
+
+model MentalState {
+  id             String   @id @default(cuid())
+  gameId         String   @unique              // One mental state per game
+  game           Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  
+  confidence     Int                           // 1-10
+  sleepHours     Float                         // Allows decimals (7.5 hours)
+  sleepQuality   Int                           // 1-10
+  stressLevel    Int                           // 1-10
+  physicalEnergy Int                           // 1-10
+  notes          String?                       // Optional text notes
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
