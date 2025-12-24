@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
 
 export default function SignupPage() {
@@ -75,15 +76,38 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call when backend is ready
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Call signup API
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-      // Mock successful signup
-      console.log('Signup data:', formData);
+      const data = await response.json();
 
-      // Redirect to dashboard
-      router.push('/dashboard');
+      if (!response.ok) {
+        setErrors({
+          submit: data.error || 'An error occurred during signup.',
+        });
+        return;
+      }
+
+      // Automatically sign in after successful signup
+      const signInResult = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
+
+      if (signInResult?.error) {
+        // Signup succeeded but login failed - redirect to login page
+        router.push('/auth/login?message=Account created. Please log in.');
+      } else {
+        // Both signup and login succeeded - redirect to dashboard
+        router.push('/dashboard');
+      }
     } catch (error) {
       setErrors({
         submit: 'An error occurred during signup. Please try again.',
