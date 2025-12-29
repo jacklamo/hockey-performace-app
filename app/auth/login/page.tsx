@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
@@ -29,17 +30,20 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call when backend is ready
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const result = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
 
-      // Mock successful login
-      console.log('Login data:', formData);
-
-      // Redirect to dashboard
-      router.push('/dashboard');
+      if (result?.error) {
+        setError('Invalid email or password');
+      } else {
+        // Redirect to dashboard on success
+        router.push('/dashboard');
+      }
     } catch (err) {
-      setError('Invalid email or password');
+      setError('An error occurred during login. Please try again.');
     } finally {
       setIsLoading(false);
     }

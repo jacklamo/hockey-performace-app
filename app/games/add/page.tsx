@@ -86,14 +86,24 @@ export default function AddGamePage() {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call when backend is ready
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch('/api/games', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-      // Mock successful save
-      console.log('Game data:', formData);
+      const data = await response.json();
 
-      // Redirect to dashboard
+      if (!response.ok) {
+        setErrors({
+          submit: data.error || 'An error occurred while saving the game.',
+        });
+        return;
+      }
+
+      // Redirect to dashboard on success
       router.push('/dashboard');
     } catch (error) {
       setErrors({

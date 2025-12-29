@@ -214,35 +214,15 @@ const avgPointsLowConf = average(lowConfidenceGames.map(g => g.goals + g.assists
 **Commit checkpoint:** "Polish UI and add loading/error states"
 
 ---
-
-## What We're NOT Building (Yet)
-
-❌ Web scraping (Phase 2)
-❌ Advanced analytics (trends, best game analysis)
-❌ Comparison to benchmarks
-❌ Team/coach features
-❌ Social features
-❌ Export data
-❌ Notifications
-❌ Email verification
-❌ Password reset
-❌ Profile editing
-❌ Multiple sports
-❌ Dark mode
-
-**If you think of a feature, ask: "Do I need this to test if the core idea works?" If no, skip it.**
-
----
-
 ## Success Criteria for MVP
 
-✅ I can create an account
-✅ I can add a game with stats in under 2 minutes
-✅ I can log mental state in under 90 seconds on my phone
-✅ After 5+ games, I see meaningful insights about confidence and sleep
-✅ The insights are accurate (I verify the math by hand)
-✅ A teammate can use it without me explaining anything
-✅ It's deployed and accessible via URL
+ I can create an account
+ I can add a game with stats in under 2 minutes
+ I can log mental state in under 90 seconds on my phone
+ After 5+ games, I see meaningful insights about confidence and sleep
+ The insights are accurate (I verify the math by hand)
+ A teammate can use it without me explaining anything
+ It's deployed and accessible via URL
 
 ---
 
