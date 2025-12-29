@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
@@ -28,21 +28,206 @@ interface Game {
   mentalState?: MentalState;
 }
 
-export default function GameDetailPage({ params }: { params: { id: string } }) {
+// Mock data for demonstration
+const MOCK_GAMES: Game[] = [
+  {
+    id: '1',
+    date: '2024-01-15',
+    opponent: 'Red Wings',
+    homeAway: 'home',
+    result: 'win',
+    goals: 2,
+    assists: 1,
+    shots: 5,
+    plusMinus: 2,
+    iceTime: 18.5,
+    mentalState: {
+      confidence: 9,
+      sleepHours: 8.5,
+      sleepQuality: 9,
+      stressLevel: 3,
+      physicalEnergy: 8,
+      notes: 'Felt great, well rested'
+    }
+  },
+  {
+    id: '2',
+    date: '2024-01-12',
+    opponent: 'Bruins',
+    homeAway: 'away',
+    result: 'loss',
+    goals: 0,
+    assists: 1,
+    shots: 3,
+    plusMinus: -1,
+    iceTime: 16.2,
+    mentalState: {
+      confidence: 5,
+      sleepHours: 6,
+      sleepQuality: 5,
+      stressLevel: 7,
+      physicalEnergy: 5,
+      notes: 'Tired from travel'
+    }
+  },
+  {
+    id: '3',
+    date: '2024-01-10',
+    opponent: 'Maple Leafs',
+    homeAway: 'home',
+    result: 'win',
+    goals: 1,
+    assists: 2,
+    shots: 6,
+    plusMinus: 3,
+    iceTime: 19.8,
+    mentalState: {
+      confidence: 8,
+      sleepHours: 8,
+      sleepQuality: 8,
+      stressLevel: 4,
+      physicalEnergy: 9,
+      notes: 'Good energy, team played well'
+    }
+  },
+  {
+    id: '4',
+    date: '2024-01-08',
+    opponent: 'Canadiens',
+    homeAway: 'away',
+    result: 'win',
+    goals: 3,
+    assists: 0,
+    shots: 7,
+    plusMinus: 2,
+    iceTime: 20.5,
+    mentalState: {
+      confidence: 9,
+      sleepHours: 7.5,
+      sleepQuality: 8,
+      stressLevel: 3,
+      physicalEnergy: 8,
+      notes: 'Hat trick game!'
+    }
+  },
+  {
+    id: '5',
+    date: '2024-01-05',
+    opponent: 'Rangers',
+    homeAway: 'home',
+    result: 'loss',
+    goals: 0,
+    assists: 0,
+    shots: 2,
+    plusMinus: -2,
+    iceTime: 14.3,
+    mentalState: {
+      confidence: 4,
+      sleepHours: 6.5,
+      sleepQuality: 6,
+      stressLevel: 8,
+      physicalEnergy: 4,
+      notes: 'Felt off all game'
+    }
+  },
+  {
+    id: '6',
+    date: '2024-01-03',
+    opponent: 'Penguins',
+    homeAway: 'away',
+    result: 'win',
+    goals: 1,
+    assists: 1,
+    shots: 4,
+    plusMinus: 1,
+    iceTime: 17.9,
+    mentalState: {
+      confidence: 7,
+      sleepHours: 7,
+      sleepQuality: 7,
+      stressLevel: 5,
+      physicalEnergy: 7,
+      notes: 'Solid performance'
+    }
+  },
+  {
+    id: '7',
+    date: '2024-01-01',
+    opponent: 'Flyers',
+    homeAway: 'home',
+    result: 'win',
+    goals: 2,
+    assists: 2,
+    shots: 8,
+    plusMinus: 3,
+    iceTime: 21.2,
+    mentalState: {
+      confidence: 9,
+      sleepHours: 9,
+      sleepQuality: 9,
+      stressLevel: 2,
+      physicalEnergy: 9,
+      notes: 'New year, great start!'
+    }
+  },
+  {
+    id: '8',
+    date: '2023-12-28',
+    opponent: 'Devils',
+    homeAway: 'away',
+    result: 'loss',
+    goals: 1,
+    assists: 0,
+    shots: 5,
+    plusMinus: 0,
+    iceTime: 18.1,
+    mentalState: {
+      confidence: 6,
+      sleepHours: 6.5,
+      sleepQuality: 6,
+      stressLevel: 6,
+      physicalEnergy: 6,
+      notes: 'Average game'
+    }
+  }
+];
+
+export default function GameDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState('');
+  const [useMockData, setUseMockData] = useState(true); // Toggle for demo mode
+  const [gameId, setGameId] = useState<string>('');
 
   useEffect(() => {
-    fetchGame();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    params.then(p => setGameId(p.id));
+  }, [params]);
 
-  const fetchGame = async () => {
+  const fetchGame = useCallback(async () => {
+    if (!gameId) return;
+
     try {
-      const response = await fetch(`/api/games/${params.id}`);
+      // Use mock data for demonstration
+      if (useMockData) {
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const foundGame = MOCK_GAMES.find(g => g.id === gameId);
+
+        if (!foundGame) {
+          setError('Game not found');
+          setIsLoading(false);
+          return;
+        }
+
+        setGame(foundGame);
+        setIsLoading(false);
+        return;
+      }
+
+      // Real API call
+      const response = await fetch(`/api/games/${gameId}`);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -64,7 +249,11 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [useMockData, gameId, router]);
+
+  useEffect(() => {
+    fetchGame();
+  }, [fetchGame]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -85,7 +274,15 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
     setIsDeleting(true);
 
     try {
-      const response = await fetch(`/api/games/${params.id}`, {
+      // If using mock data, just navigate back
+      if (useMockData) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        router.push('/dashboard');
+        return;
+      }
+
+      // Real API call
+      const response = await fetch(`/api/games/${gameId}`, {
         method: 'DELETE',
       });
 
@@ -131,14 +328,26 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
-        <Link
-          href="/dashboard"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Dashboard
-        </Link>
+        {/* Back Button and Toggle */}
+        <div className="flex justify-between items-center mb-6">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </Link>
+          <button
+            onClick={() => {
+              setUseMockData(!useMockData);
+              setIsLoading(true);
+              setGame(null);
+            }}
+            className="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
+          >
+            {useMockData ? 'Using Mock Data' : 'Using Real Data'}
+          </button>
+        </div>
 
         {/* Page Heading */}
         <div className="mb-6">
@@ -283,7 +492,7 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
                 No mental state logged for this game
               </p>
               <Link
-                href={`/games/${params.id}/mental`}
+                href={`/games/${gameId}/mental`}
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Add Mental State
@@ -295,7 +504,7 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3">
           <Link
-            href={`/games/${params.id}/edit`}
+            href={`/games/${gameId}/edit`}
             className="flex-1 text-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
           >
             Edit Game

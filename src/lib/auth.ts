@@ -1,10 +1,15 @@
 import { getServerSession } from "next-auth"
-import { authOptions } from '../app/api/auth/[...nextauth]/route'
+import { authOptions } from '../../app/api/auth/[...nextauth]/route'
 import { hash } from 'bcryptjs'
 
 export async function getCurrentUser() {
-    const session = await getServerSession(authOptions)
-    return session?.user
+    try {
+        const session = await getServerSession(authOptions)
+        return session?.user
+    } catch (error) {
+        console.warn("Error getting session:", error)
+        return undefined
+    }
 }
 
 export async function requireAuth() {
