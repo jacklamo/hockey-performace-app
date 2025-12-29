@@ -214,17 +214,6 @@ const avgPointsLowConf = average(lowConfidenceGames.map(g => g.goals + g.assists
 **Commit checkpoint:** "Polish UI and add loading/error states"
 
 ---
-## Success Criteria for MVP
-
- I can create an account
- I can add a game with stats in under 2 minutes
- I can log mental state in under 90 seconds on my phone
- After 5+ games, I see meaningful insights about confidence and sleep
- The insights are accurate (I verify the math by hand)
- A teammate can use it without me explaining anything
- It's deployed and accessible via URL
-
----
 
 ## Development Workflow
 
@@ -329,59 +318,3 @@ const avgLow = lowConfGames.reduce((sum, g) => sum + g.goals + g.assists, 0) / l
 // Display
 return `You average ${avgHigh.toFixed(1)} points when confidence is 8+ vs ${avgLow.toFixed(1)} points when 5 or below`
 ```
-
-### Mobile Optimization
-- Use Tailwind responsive classes (sm:, md:, lg:)
-- Forms: `<input type="range">` for sliders, large step sizes
-- Touch targets minimum 44x44px
-- Test on actual device, not just Chrome DevTools
-
----
-
-## Testing Checklist (Before Calling it Done)
-
-- [ ] Sign up new account
-- [ ] Log in with account
-- [ ] Add 3 games with different stats
-- [ ] Log mental state for each game (use different values)
-- [ ] View dashboard - see summary stats
-- [ ] Add 2 more games with mental state
-- [ ] Check if insights appear (should show after 5 games)
-- [ ] Verify insight math is correct by hand
-- [ ] Edit a game's stats
-- [ ] Delete a game
-- [ ] Log out and log back in - data persists
-- [ ] Open on phone - forms are usable
-- [ ] Have teammate create account and add a game
-
----
-
-## Timeline
-
-- **Week 1:** Features 1-3 (Auth, Add Game, Games List)
-- **Week 2:** Features 4-5 (Mental State, Stats Summary)
-- **Week 3:** Features 6-7 (Correlations, Charts)
-- **Week 4:** Features 8-10 (Mobile Polish, Edit/Delete, Final Polish)
-
-**Target:** Working MVP by December 8
-
----
-
-## When You Get Stuck
-
-1. Check if you're overthinking it - can it be simpler?
-2. Ask Claude Code for specific implementation
-3. Google the error message
-4. Check Next.js docs: https://nextjs.org/docs
-5. Check Prisma docs: https://www.prisma.io/docs
-6. Commit what works, try the broken part in a new branch
-
----
-
-## Final Note
-
-**This is bare bones for a reason.** Get this working first. Get it in your hands. Use it for 5 games. Then decide what to add.
-
-Don't add features until you've used what exists. You'll know what's missing when you actually use it.
-
-Build fast. Ship fast. Iterate.
