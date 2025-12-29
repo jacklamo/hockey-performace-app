@@ -1,38 +1,70 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 
-// Mock data - replace with actual data from database/API
-const mockGameData = {
-  id: '1',
-  date: '2024-11-15',
-  opponent: 'Boston College',
-  homeAway: 'home',
-  result: 'win',
-  goals: 2,
-  assists: 1,
-  shots: 5,
-  plusMinus: 2,
-  iceTime: 18,
-  mentalState: {
-    confidence: 8,
-    sleepHours: 7.5,
-    sleepQuality: 8,
-    stressLevel: 4,
-    physicalEnergy: 9,
-    notes: 'Felt great today. Got a good night sleep and stayed focused.',
-  },
-};
+interface MentalState {
+  confidence: number;
+  sleepHours: number;
+  sleepQuality: number;
+  stressLevel: number;
+  physicalEnergy: number;
+  notes?: string;
+}
+
+interface Game {
+  id: string;
+  date: string;
+  opponent: string;
+  homeAway: string;
+  result: string;
+  goals: number;
+  assists: number;
+  shots: number;
+  plusMinus: number;
+  iceTime: number;
+  mentalState?: MentalState;
+}
 
 export default function GameDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
+  const [game, setGame] = useState<Game | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState('');
 
-  // In production, fetch game data using params.id
-  const game = mockGameData;
+  useEffect(() => {
+    fetchGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchGame = async () => {
+    try {
+      const response = await fetch(`/api/games/${params.id}`);
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push('/auth/login');
+          return;
+        }
+        if (response.status === 404) {
+          setError('Game not found');
+          return;
+        }
+        throw new Error('Failed to fetch game');
+      }
+
+      const data = await response.json();
+      setGame(data.game);
+    } catch (err) {
+      setError('Failed to load game');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -43,7 +75,7 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
     });
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     const confirmed = window.confirm(
       'Are you sure you want to delete this game? This cannot be undone.'
     );
@@ -52,15 +84,49 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
 
     setIsDeleting(true);
 
-    // TODO: Replace with actual API call
-    setTimeout(() => {
-      console.log('Game deleted:', params.id);
+    try {
+      const response = await fetch(`/api/games/${params.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete game');
+      }
+
       router.push('/dashboard');
-    }, 500);
+    } catch (err) {
+      alert('Failed to delete game. Please try again.');
+      console.error(err);
+      setIsDeleting(false);
+    }
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    );
+  }
+
+  if (error || !game) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error || 'Game not found'}</p>
+          <Link
+            href="/dashboard"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Back to Dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   const points = game.goals + game.assists;
-  const hasmentalState = game.mentalState !== null;
+  const hasMentalState = game.mentalState !== null && game.mentalState !== undefined;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -153,21 +219,21 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
         {/* Section 2 - Mental State */}
         <div
           className={`rounded-lg shadow-md p-6 mb-6 ${
-            hasmentalState ? 'bg-blue-50' : 'bg-white'
+            hasMentalState ? 'bg-blue-50' : 'bg-white'
           }`}
         >
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
             Mental State
           </h2>
 
-          {hasmentalState ? (
+          {hasMentalState ? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 {/* Confidence */}
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Confidence</p>
                   <p className="text-3xl font-bold text-gray-900">
-                    {game.mentalState.confidence}
+                    {game.mentalState!.confidence}
                     <span className="text-lg text-gray-500 ml-1">/10</span>
                   </p>
                 </div>
@@ -176,11 +242,11 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Sleep</p>
                   <p className="text-3xl font-bold text-gray-900">
-                    {game.mentalState.sleepHours}
+                    {game.mentalState!.sleepHours}
                     <span className="text-lg text-gray-500 ml-1">hours</span>
                   </p>
                   <p className="text-sm text-gray-600 mt-1">
-                    ({game.mentalState.sleepQuality}/10 quality)
+                    ({game.mentalState!.sleepQuality}/10 quality)
                   </p>
                 </div>
 
@@ -188,7 +254,7 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Stress</p>
                   <p className="text-3xl font-bold text-gray-900">
-                    {game.mentalState.stressLevel}
+                    {game.mentalState!.stressLevel}
                     <span className="text-lg text-gray-500 ml-1">/10</span>
                   </p>
                 </div>
@@ -197,17 +263,17 @@ export default function GameDetailPage({ params }: { params: { id: string } }) {
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Physical Energy</p>
                   <p className="text-3xl font-bold text-gray-900">
-                    {game.mentalState.physicalEnergy}
+                    {game.mentalState!.physicalEnergy}
                     <span className="text-lg text-gray-500 ml-1">/10</span>
                   </p>
                 </div>
               </div>
 
               {/* Notes */}
-              {game.mentalState.notes && (
+              {game.mentalState!.notes && (
                 <div className="pt-4 border-t border-blue-200">
                   <p className="text-sm text-gray-600 mb-2">Notes:</p>
-                  <p className="text-gray-900">{game.mentalState.notes}</p>
+                  <p className="text-gray-900">{game.mentalState!.notes}</p>
                 </div>
               )}
             </>

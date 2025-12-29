@@ -5,12 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 
-// Mock game data - replace with actual data from database/API
-const mockGameData = {
-  opponent: 'Boston College',
-  date: '2024-11-15',
-};
-
 export default function MentalStatePage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -24,26 +18,25 @@ export default function MentalStatePage({ params }: { params: { id: string } }) 
     notes: '',
   });
 
-  const game = mockGameData;
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      const response = await fetch(`/api/games/${params.id}/mental`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-      console.log('Mental state data:', formData);
+      if (!response.ok) {
+        const data = await response.json();
+        alert(data.error || 'Failed to save mental state');
+        setIsLoading(false);
+        return;
+      }
 
       // Show success message
       setShowSuccess(true);
@@ -54,6 +47,7 @@ export default function MentalStatePage({ params }: { params: { id: string } }) 
       }, 1000);
     } catch (error) {
       console.error('Error saving mental state:', error);
+      alert('An error occurred. Please try again.');
       setIsLoading(false);
     }
   };
@@ -87,9 +81,6 @@ export default function MentalStatePage({ params }: { params: { id: string } }) 
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Post-Game Check-In
           </h1>
-          <p className="text-lg text-gray-600 mb-3">
-            {game.opponent} - {formatDate(game.date)}
-          </p>
           <p className="text-gray-600 italic">
             This takes 90 seconds. Answer honestly - this is for you, not your coach.
           </p>
